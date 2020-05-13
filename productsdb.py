@@ -15,13 +15,13 @@ class ProdutosDB(object):
         self.db.close_db()
 
     def list(self):
-        sql = 'SELECT tag, value FROM products'
+        sql = 'SELECT tag, name, icon, value FROM products'
         r = self.db.cursor.execute(sql)
         return r.fetchall()
 
     def find_product(self, tag):
         r = self.db.cursor.execute(
-            'SELECT tag, value FROM products WHERE tag = ?', (tag,))
+            'SELECT tag, name, icon, value FROM products WHERE tag = ?', (tag,))
         return r.fetchone()
 
     def update_product(self, tag, value):
@@ -42,6 +42,6 @@ class ProdutosDB(object):
             raise e
 
     def listZeroStock(self):
-        sql = 'SELECT tag, value FROM products WHERE value = 0'
+        sql = 'SELECT tag, name, icon, value FROM products WHERE value = 0'
         r = self.db.cursor.execute(sql)
         return r.fetchall()        
