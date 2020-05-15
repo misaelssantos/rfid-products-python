@@ -9,15 +9,16 @@ from products import ProductList
 log = Logger('MQTT')
 prods = ProductList()
 
-mqtt_broker = os.getenv('MQTT_BROKER', "industrial.api.ubidots.com")
-mqtt_token =  os.getenv('MQTT_TOKEN')
+mqtt_broker = os.getenv('MQTT_BROKER', '192.168.0.17')
+mqtt_user =  os.getenv('MQTT_USER')
+mqtt_password =  os.getenv('MQTT_PASSWD')
 mqtt_port = int(os.getenv('MQTT_PORT', 1883))
 
-if mqtt_token is None:
-    log.error("Variavel MQTT_TOKEN tem que ser configurada")
+if mqtt_user is None:
+    log.error("Variavel MQTT_USER tem que ser configurada")
     sys.exit(1)
 
-topic_subscribe = "/v1.6/devices/esp32/+/lv"
+topic_subscribe = "/compras/devices/esp32/#"
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
@@ -39,14 +40,14 @@ def on_message(client, userdata, msg):
 
 def extract_tag(topic):
     parts = topic.split("/")
-    tag = parts[len(parts)-2]
+    tag = parts[len(parts)-1]
     return tag
 
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.username_pw_set(mqtt_token, password=None)
+client.username_pw_set(mqtt_user, password=mqtt_password)
 client.connect(mqtt_broker, mqtt_port, 60)
 # Blocking call that processes network traffic, dispatches callbacks and
 # handles reconnecting.

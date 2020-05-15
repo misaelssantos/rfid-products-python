@@ -29,7 +29,7 @@ python DB_Ini.py
 ## Iniciando o subscriber
 
 ```
-# Preencher arquivo .env com MQTT_BROKER, MQTT_TOKEN e MQTT_PORT
+# Preencher arquivo .env com MQTT_BROKER, MQTT_USER, MQTT_PASSWD e MQTT_PORT
 
 chmod +x run.sh
 ./run.sh
