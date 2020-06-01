@@ -36,3 +36,14 @@ class ProductList:
     for p in prods:
       self.add(p[0], p[1])
     return self.doc
+
+  def findByTag(self, tag):
+    log.debug(f'Looking product "{tag}"...')
+    r = self.db.find_product(tag)
+    prod = {
+      'tag' : r[0],
+      'name': r[1],
+      'icon': r[2],
+      'value': r[3]
+    }
+    return prod

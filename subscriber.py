@@ -19,7 +19,8 @@ if mqtt_user is None:
     sys.exit(1)
 
 topic_subscribe = "/compras/devices/esp32/#"
-topic_last_product = "/compras/lastproduct"
+topic_last_out = "/compras/lastproduct/OUTPUT"
+topic_last_in = "/compras/lastproduct/INPUT"
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
@@ -39,7 +40,15 @@ def on_message(client, userdata, msg):
     # updating database...
     prods.update(tag, value)
     # Update last registered product topic...
-    client.publish(topic_last_product, payload=tag)
+    product = prods.findByTag(tag)
+    payload = product['name']
+    if value == 0:
+        client.publish(topic_last_out, payload=payload)
+        log.info(f'Msg Enviada: {topic_last_out} {payload}')
+    else:
+        client.publish(topic_last_in, payload=payload)
+        log.info(f'Msg Enviada: {topic_last_in} {payload}')
+        
     
 
 def extract_tag(topic):
